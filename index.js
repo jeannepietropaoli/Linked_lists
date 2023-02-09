@@ -53,12 +53,8 @@ class LinkedList {
   }
 
   size(count = 0, node = this.head()) {
-    if (node.nextNode === undefined) {
-      return count;
-    }
-    if (node.nextNode === null) {
-      return count + 1;
-    }
+    if (node.nextNode === undefined) return count;
+    if (node.nextNode === null) return count + 1;
     count += 1;
     return this.size(count, node.nextNode);
   }
@@ -67,15 +63,20 @@ class LinkedList {
     return this.list.head;
   }
 
-  tail() {
-    return this.list[this.size - 1]; // or this.list[this.list.length-1]
+  tail(node = this.head()) {
+    if (node.nextNode === null || node.nextNode === undefined) return node;
+    return this.tail(node.nextNode);
   }
 
-  at(index) {
-    return this.list[index];
+  at(index, node = this.head(), count = 1) {
+    if (node === null || node.nextNode === undefined)
+      return 'not found anything';
+    if (count === index) return node;
+    count += 1;
+    return this.at(index, node.nextNode, count);
   }
 
-  pop() {
+  /* pop() {
     this.list.pop();
     this.list.tail().nextNode = null;
   }
@@ -96,7 +97,7 @@ class LinkedList {
       if (node.nextNode === null) string += 'null';
     });
     console.log(string);
-  }
+  } */
 }
 
 const list = new LinkedList();
