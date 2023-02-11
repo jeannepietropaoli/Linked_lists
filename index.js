@@ -40,7 +40,7 @@ class LinkedList {
     };
   }
 
-  appendValue(value, node = this.head()) {
+  appendValue(value, node = this.head) {
     if (node.nextNode === null || node.nextNode === undefined) {
       node.nextNode = new Node(value);
     } else {
@@ -49,26 +49,30 @@ class LinkedList {
   }
 
   prepend(value) {
-    this.list.head = new Node(value, this.list.head.nextNode);
+    this.head = new Node(value, this.head.nextNode);
   }
 
-  size(count = 0, node = this.head()) {
+  size(count = 0, node = this.head) {
     if (node.nextNode === undefined) return count;
     if (node.nextNode === null) return count + 1;
     count += 1;
     return this.size(count, node.nextNode);
   }
 
-  head() {
+  get head() {
     return this.list.head;
   }
 
-  tail(node = this.head()) {
+  set head(newValue) {
+    this.list.head = newValue;
+  }
+
+  tail(node = this.head) {
     if (node.nextNode === null || node.nextNode === undefined) return node;
     return this.tail(node.nextNode);
   }
 
-  at(index, node = this.head(), count = 1) {
+  at(index, node = this.head, count = 1) {
     if (node === null || node.nextNode === undefined)
       return 'not found anything';
     if (count === index) return node;
@@ -76,28 +80,28 @@ class LinkedList {
     return this.at(index, node.nextNode, count);
   }
 
-  /* pop() {
-    this.list.pop();
-    this.list.tail().nextNode = null;
+  pop(node = this.head) {
+    if (this.size() === 1) this.head = {};
+    else if (node.nextNode.nextNode === null) node.nextNode = null;
+    else this.pop(node.nextNode);
   }
 
-  contains(value) {
-    return this.list.some((node) => node.value === value);
+  contains(value, node = this.head) {
+    if (node.value === value) return true;
+    if (node.nextNode === null) return false;
+    return this.contains(value, node.nextNode);
   }
 
-  find(value) {
-    return this.list.findIndex((node) => node.value === value);
+  find(value, node = this.head, count = 1) {
+    if (node.value === value) return count;
+    if (node.nextNode === null) return 'could not find the value';
+    return this.find(value, node.nextNode, ++count);
   }
 
-  toString() {
-    let string = '';
-    // recursive possibility ?
-    this.list.forEach((node) => {
-      string += `(${node.value}) -> (${node.nextNode})`;
-      if (node.nextNode === null) string += 'null';
-    });
-    console.log(string);
-  } */
+  toString(node = this.head) {
+    if (node.nextNode === null) return `( ${node.value} ) -> null`;
+    return `( ${node.value} ) -> ${this.toString(node.nextNode)}`;
+  }
 }
 
 const list = new LinkedList();
