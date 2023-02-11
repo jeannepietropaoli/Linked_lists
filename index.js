@@ -21,18 +21,6 @@ class Node {
   }
 }
 
-/* {
-  head : {
-    node1 : valueNode1
-    next : {
-      node2 : valueNode2
-      next : {
-
-      }
-    }
-  }
-} */
-
 class LinkedList {
   constructor() {
     this.list = {
@@ -101,6 +89,27 @@ class LinkedList {
   toString(node = this.head) {
     if (node.nextNode === null) return `( ${node.value} ) -> null`;
     return `( ${node.value} ) -> ${this.toString(node.nextNode)}`;
+  }
+
+  nodeAt(index, node = this.head, count = 1) {
+    if (index === count) return node;
+    if (node.nextNode === null) return 'not found';
+    return this.nodeAt(index, node.nextNode, ++count);
+  }
+
+  insertAt(value, index, count = 1, node = this.head) {
+    if (index === count)
+      this.nodeAt(count - 1).nextNode = new Node(value, node);
+    else if (node.nextNode === null) return 'index not found';
+    else return this.insertAt(value, index, ++count, node.nextNode);
+    return this.list;
+  }
+
+  removeAt(index, count = 1, node = this.head) {
+    if (index === count) this.nodeAt(count - 1).nextNode = node.nextNode;
+    else if (node.nextNode === null) return 'index not found';
+    else return this.removeAt(index, ++count, node.nextNode);
+    return this.list;
   }
 }
 
