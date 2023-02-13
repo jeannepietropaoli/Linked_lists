@@ -17,6 +17,7 @@ The goal of this project is to create two classes or factories:
 
 - Creating classes (constructor, parameters, getters, setters and methods)
 - Implement a linked-list abstract data structure by creating custom linkedList and Node classes
+- Using recursion
 
 ## Features
 
