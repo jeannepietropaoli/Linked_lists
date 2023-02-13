@@ -28,21 +28,29 @@ class LinkedList {
     };
   }
 
+  isListEmpty() {
+    return this.head.nextNode === undefined;
+  }
+
   appendValue(value, node = this.head) {
-    if (node.nextNode === null || node.nextNode === undefined) {
-      node.nextNode = new Node(value);
-    } else {
+    if (this.isListEmpty()) this.head = new Node(value);
+    else if (node.nextNode === null) node.nextNode = new Node(value);
+    else {
       this.appendValue(value, node.nextNode);
     }
+    return this.list;
   }
 
   prepend(value) {
-    this.head = new Node(value, this.head.nextNode);
+    const currentHeadNode = this.head;
+    if (this.head.nextNode === undefined) this.head = new Node(value, null);
+    else this.head = new Node(value, currentHeadNode);
+    return this.list;
   }
 
-  size(count = 0, node = this.head) {
-    if (node.nextNode === undefined) return count;
-    if (node.nextNode === null) return count + 1;
+  size(count = 1, node = this.head) {
+    if (this.isListEmpty()) return 0;
+    if (node.nextNode === null) return count;
     count += 1;
     return this.size(count, node.nextNode);
   }
@@ -56,13 +64,13 @@ class LinkedList {
   }
 
   tail(node = this.head) {
-    if (node.nextNode === null || node.nextNode === undefined) return node;
+    if (this.isListEmpty()) return 'empty list';
+    if (node.nextNode === null) return node;
     return this.tail(node.nextNode);
   }
 
   at(index, node = this.head, count = 1) {
-    if (node === null || node.nextNode === undefined)
-      return 'not found anything';
+    if (node === null || this.isListEmpty()) return 'not found anything';
     if (count === index) return node;
     count += 1;
     return this.at(index, node.nextNode, count);
@@ -87,33 +95,34 @@ class LinkedList {
   }
 
   toString(node = this.head) {
+    if (this.isListEmpty()) return 'empty list';
     if (node.nextNode === null) return `( ${node.value} ) -> null`;
     return `( ${node.value} ) -> ${this.toString(node.nextNode)}`;
   }
 
   nodeAt(index, node = this.head, count = 1) {
+    if (this.isListEmpty()) return 'list is empty';
     if (index === count) return node;
     if (node.nextNode === null) return 'not found';
     return this.nodeAt(index, node.nextNode, ++count);
   }
 
   insertAt(value, index, count = 1, node = this.head) {
+    if (index === 1) return this.prepend(value);
+    if (index <= 0 || this.size() < index) return 'index must be valid';
     if (index === count)
       this.nodeAt(count - 1).nextNode = new Node(value, node);
-    else if (node.nextNode === null) return 'index not found';
     else return this.insertAt(value, index, ++count, node.nextNode);
     return this.list;
   }
 
   removeAt(index, count = 1, node = this.head) {
-    if (index === count) this.nodeAt(count - 1).nextNode = node.nextNode;
+    if (this.size() === 0) return 'empty list';
+    if (index === 1)
+      this.size() === 1 ? (this.head = {}) : (this.head = node.nextNode);
+    else if (index === count) this.nodeAt(count - 1).nextNode = node.nextNode;
     else if (node.nextNode === null) return 'index not found';
     else return this.removeAt(index, ++count, node.nextNode);
     return this.list;
   }
 }
-
-const list = new LinkedList();
-list.appendValue('first');
-list.appendValue('second');
-list.prepend('before first');
